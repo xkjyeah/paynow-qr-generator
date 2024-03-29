@@ -38,12 +38,12 @@
       <input type="text" v-else id="phone" :value="target" @input="event => target = (event.target as any).value" />
     </div>
 
-    <!-- <div class="field">
+    <div class="field" v-if="mode === 'uen'">
       <label for="reference">
         <h4>Transaction Reference</h4>
       </label>
       <input type="text" id="reference" :value="reference" @input="event => reference = event.target?.value" />
-    </div> -->
+    </div>
     <img src="./assets/paynow-logo-2-01.png" ref="logoRef" class="logo" />
 
 
@@ -228,7 +228,7 @@ watch([mode, target, reference, canvasRef], debounce(async () => {
       '01': mode.value === 'phone' ? '0' : '2',
       '02': standardizePhone(mode.value, target.value),
       '03': '1', // Amount is not editabe
-      '04': reference.value || null,
+      '04': mode.value === 'uen' ? reference.value || null : null,
     }),
     '52': '0000', // Merchant category code
     '53': '702', // ISO 4217 code for SGD
