@@ -32,8 +32,8 @@
         <h4>{{ mode === 'phone' ? 'Phone' : 'UEN' }}</h4>
       </label>
       <input type="tel" v-if="mode === 'phone'" id="phone" :value="target"
-        @input="event => target = event.target?.value" />
-      <input type="text" v-else id="phone" :value="target" @input="event => target = event.target?.value" />
+        @input="event => target = (event.target as any).value" />
+      <input type="text" v-else id="phone" :value="target" @input="event => target = (event.target as any).value" />
     </div>
 
     <!-- <div class="field">
