@@ -46,8 +46,9 @@
     </div>
     <img src="./assets/paynow-logo-2-01.png" ref="logoRef" class="logo" />
 
+    <img :src="qrcodeDataURL" class="generated-QR" />
 
-    <canvas ref="canvasRef" width="600" height="600" class="generated-QR"></canvas>
+    <canvas ref="canvasRef" width="600" height="600" style="display: none"></canvas>
     <div class="caption">{{ target }}</div>
     <div style="text-align: center">
       <br />
@@ -82,6 +83,23 @@
   }
 }
 
+@media screen {
+  .generated-QR {
+    max-width: 500px;
+    max-height:
+      500px;
+  }
+
+  header,
+  main,
+  footer {
+    max-width: 520px;
+    display: block;
+    margin:
+      auto;
+  }
+}
+
 h4 {
   margin-top: 1em;
   margin-bottom: 0;
@@ -103,21 +121,9 @@ input[type="tel"] {
 
 .generated-QR {
   width: 100%;
-  max-width: 500px;
-  max-height:
-    500px;
   height: auto;
   margin: auto;
   display: block;
-}
-
-header,
-main,
-footer {
-  max-width: 520px;
-  display: block;
-  margin:
-    auto;
 }
 
 .caption {
@@ -126,6 +132,10 @@ footer {
 
 footer ol li {
   margin-top: 1em;
+}
+
+button {
+  padding: 1em;
 }
 </style>
 
@@ -245,7 +255,7 @@ watch([mode, target, reference, canvasRef], debounce(async () => {
 
   // qrcodeDataURL.value = dataURL;
   if (canvasRef.value) {
-    await qrcode.toCanvas(canvasRef.value, data, { errorCorrectionLevel: 'H', width: 600, color: { dark: '#941c80' } })
+    await qrcode.toCanvas(canvasRef.value, data, { errorCorrectionLevel: 'M', width: 600, color: { dark: '#941c80' } })
     const context = canvasRef.value?.getContext('2d')
 
     const logoElem = logoRef.value
@@ -255,6 +265,8 @@ watch([mode, target, reference, canvasRef], debounce(async () => {
       context!.fillStyle = 'white'
       context!.fillRect(300 - targetWidth / 2, 300 - targetHeight / 2, targetWidth, targetHeight)
       context!.drawImage(logoElem, 300 - targetWidth / 2, 300 - targetHeight / 2, targetWidth, targetHeight)
+
+      qrcodeDataURL.value = canvasRef.value.toDataURL()
     }
   }
 }, 500), { immediate: true })
