@@ -42,7 +42,7 @@
       <label for="reference">
         <h4>Transaction Reference</h4>
       </label>
-      <input type="text" id="reference" :value="reference" @input="event => reference = event.target?.value" />
+      <input type="text" id="reference" :value="reference" @input="event => reference = (event.target as any).value" />
     </div>
     <img src="./assets/paynow-logo-2-01.png" ref="logoRef" class="logo" />
 
