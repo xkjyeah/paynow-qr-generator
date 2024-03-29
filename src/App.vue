@@ -38,7 +38,7 @@
       <input type="text" v-else id="phone" :value="target" @input="event => target = (event.target as any).value" />
     </div>
 
-    <div class="field" v-if="mode === 'uen'">
+    <div class="field no-print" v-if="mode === 'uen'">
       <label for="reference">
         <h4>Transaction Reference</h4>
       </label>
