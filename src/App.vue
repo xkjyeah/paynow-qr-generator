@@ -105,6 +105,11 @@ h4 {
   margin-bottom: 0;
 }
 
+input[type="radio"] {
+  margin: 0.8em 0;
+}
+
+
 input[type="text"],
 input[type="tel"] {
   padding: 0.3em;
