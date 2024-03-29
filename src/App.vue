@@ -49,7 +49,7 @@
     <img :src="qrcodeDataURL" class="generated-QR" />
 
     <canvas ref="canvasRef" width="600" height="600" style="display: none"></canvas>
-    <div class="caption">{{ target }}</div>
+    <div class="caption">{{ qrcodeDataTarget.replace(/^\+65/, '') }}</div>
     <div style="text-align: center">
       <br />
       <button class="no-print" @click="print">Print</button>
@@ -146,7 +146,7 @@ button {
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { sortBy, debounce } from 'lodash'
+import { sortBy, throttle } from 'lodash'
 import * as qrcode from 'qrcode'
 import crc16ccitt from 'crc/calculators/crc16ccitt'
 
@@ -220,6 +220,7 @@ const updateLocalStorage = (key: string, value: string) => {
 }
 
 const qrcodeDataURL = ref(getLocalStorage('phone'))
+const qrcodeDataTarget = ref('')
 
 const standardizePhone = (mode: string, s: string) => {
   if (mode !== 'phone') {
@@ -233,7 +234,8 @@ const standardizePhone = (mode: string, s: string) => {
   }
 }
 
-watch([mode, target, reference, canvasRef], debounce(async () => {
+watch([mode, target, reference, canvasRef], throttle(async () => {
+  const finalTarget = standardizePhone(mode.value, target.value)
   const data = new QRData({
     // EMV-Co specs: https://www.emvco.com/specifications/emv-qr-code-specification-for-payment-systems-emv-qrcps-merchant-presented-mode/
     '00': '01', // Payload format indicator: Version we're using
@@ -241,7 +243,7 @@ watch([mode, target, reference, canvasRef], debounce(async () => {
     '26': new QRData({
       '00': 'SG.PAYNOW',
       '01': mode.value === 'phone' ? '0' : '2',
-      '02': standardizePhone(mode.value, target.value),
+      '02': finalTarget,
       '03': '1', // Amount is not editabe
       '04': mode.value === 'uen' ? reference.value || null : null,
     }),
@@ -272,9 +274,10 @@ watch([mode, target, reference, canvasRef], debounce(async () => {
       context!.drawImage(logoElem, 300 - targetWidth / 2, 300 - targetHeight / 2, targetWidth, targetHeight)
 
       qrcodeDataURL.value = canvasRef.value.toDataURL()
+      qrcodeDataTarget.value = finalTarget
     }
   }
-}, 500), { immediate: true })
+}, 500, { leading: true, trailing: true }), { immediate: true })
 
 
 </script>
