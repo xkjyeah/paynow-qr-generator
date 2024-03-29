@@ -1,15 +1,17 @@
 <template>
-  <header>
+  <header class="no-print">
     <h1>PayNow QR Code Generator</h1>
   </header>
 
   <main>
-    This page generates a QR for your phone number, or for your UEN.
+    <div class="no-print">
+      This page generates a QR for your phone number, or for your UEN.
 
-    Print it out and paste it wherever you run a hawker stall, pasar malam stall,
-    or a garage sale!
+      Print it out and paste it wherever you run a hawker stall, pasar malam stall,
+      or a garage sale!
+    </div>
 
-    <div class="field">
+    <div class="field no-print">
       <h4>PayNow destination type</h4>
       <div>
         <label>
@@ -27,7 +29,7 @@
 
     </div>
 
-    <div class="field">
+    <div class="field  no-print">
       <label for="phone">
         <h4>{{ mode === 'phone' ? 'Phone' : 'UEN' }}</h4>
       </label>
@@ -42,15 +44,18 @@
       </label>
       <input type="text" id="reference" :value="reference" @input="event => reference = event.target?.value" />
     </div> -->
-
-    <img :src="qrcodeDataURL" v-if="qrcodeDataURL" class="generated-QR" />
     <img src="./assets/paynow-logo-2-01.png" ref="logoRef" class="logo" />
 
+
     <canvas ref="canvasRef" width="600" height="600" class="generated-QR"></canvas>
-    <div class="caption">{{ mode }} / {{ target }}</div>
+    <div class="caption">{{ target }}</div>
+    <div style="text-align: center">
+      <br />
+      <button class="no-print" @click="print">Print</button>
+    </div>
   </main>
 
-  <footer>
+  <footer class="no-print">
     <h2>References</h2>
     <ol>
       <li>
@@ -71,6 +76,12 @@
 </template>
 
 <style scoped>
+@media print {
+  .no-print {
+    display: none;
+  }
+}
+
 h4 {
   margin-top: 1em;
   margin-bottom: 0;
@@ -175,9 +186,11 @@ class QRData {
   }
 }
 
+const print = () => window.print()
+
 const getLocalStorage = (key: string) => {
   try {
-    return window.localStorage['target']
+    return window.localStorage[key]
   } catch {
     return ''
   }
@@ -185,7 +198,7 @@ const getLocalStorage = (key: string) => {
 
 const updateLocalStorage = (key: string, value: string) => {
   try {
-    window.localStorage['target'] = value
+    window.localStorage[key] = value
   } catch {
     return ''
   }
