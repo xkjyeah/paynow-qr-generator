@@ -257,8 +257,9 @@ watch(
           "00": "SG.PAYNOW",
           "01": mode.value === "phone" ? "0" : "2",
           "02": finalTarget,
-          "03": "1", // Amount is not editabe
-          "04": mode.value === "uen" ? reference.value || null : null,
+          "03": "1", // Amount is editabe
+          // "04": "YYYYMMDD or YYYYMMDDHHMMSS", // QR code expiry date & time
+          "05": mode.value === "uen" ? reference.value || null : null,
         }),
         "52": "0000", // Merchant category code
         "53": "702", // ISO 4217 code for SGD
