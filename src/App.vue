@@ -265,6 +265,9 @@ watch(
         "53": "702", // ISO 4217 code for SGD
         "58": "SG",
         "59": "NA", // Merchant name -- doesn't matter because PayNow has its own lookup
+        "62": new QRData({
+          "01": mode.value === "uen" ? reference.value || null : null,
+        }),
         "60": "Singapore", // City
       }).toStringWithCRC();
 
