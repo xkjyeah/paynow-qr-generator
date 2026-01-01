@@ -46,7 +46,7 @@
       />
     </div>
 
-    <div class="field no-print" v-if="mode === 'uen'">
+    <div class="field no-print">
       <label for="reference">
         <h4>Transaction Reference</h4>
       </label>
@@ -259,14 +259,14 @@ watch(
           "02": finalTarget,
           "03": "1", // Amount is editabe
           // "04": "YYYYMMDD or YYYYMMDDHHMMSS", // QR code expiry date & time
-          "05": mode.value === "uen" ? reference.value || null : null,
+          "05": reference.value || null,
         }),
         "52": "0000", // Merchant category code
         "53": "702", // ISO 4217 code for SGD
         "58": "SG",
         "59": "NA", // Merchant name -- doesn't matter because PayNow has its own lookup
         "62": new QRData({
-          "01": mode.value === "uen" ? reference.value || null : null,
+          "01": reference.value || null,
         }),
         "60": "Singapore", // City
       }).toStringWithCRC();
